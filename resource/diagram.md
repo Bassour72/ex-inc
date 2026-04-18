@@ -25,3 +25,4 @@ CLIENT (Browser)                                NGINX (Proxy)
       |                                              |
       | <==== ALL FUTURE DATA IS ENCRYPTED ====>     |
       |                                              |
+cd srcs/requirements/nginx/conf/

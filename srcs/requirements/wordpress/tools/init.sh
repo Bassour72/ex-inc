@@ -38,6 +38,7 @@ if [ ! -f "wp-config.php" ]; then
     php83 -d memory_limit=-1 /usr/local/bin/wp config set WP_REDIS_PORT 6379 --raw --allow-root
     php83 -d memory_limit=-1 /usr/local/bin/wp plugin install redis-cache --activate --allow-root
     php83 -d memory_limit=-1 /usr/local/bin/wp redis enable --allow-root
+
 fi
 
 
@@ -46,19 +47,19 @@ sed -i "/FTP_/d" wp-config.php
 
 
 
-if ! grep -q "FTP_HOST" wp-config.php; then
-    echo "Adding FTP configuration to wp-config.php..."
-    cat << EOF >> wp-config.php
-define('FS_METHOD', 'ftpext');
-define('FTP_HOST', 'ftp:21');
-define('FTP_USER', '${FTP_USER}');
-define('FTP_PASS', '${FTP_PWD}');
-define('FTP_PASSIVE', true);
-define('FTP_BASE', '/');
-define('FTP_CONTENT_DIR', '/wp-content/');
-define('FTP_PLUGIN_DIR', '/wp-content/plugins/');
-EOF
-fi
+# if ! grep -q "FTP_HOST" wp-config.php; then
+#     echo "Adding FTP configuration to wp-config.php..."
+#     cat << EOF >> wp-config.php
+# define('FS_METHOD', 'ftpext');
+# define('FTP_HOST', 'ftp:21');
+# define('FTP_USER', '${FTP_USER}');
+# define('FTP_PASS', '${FTP_PWD}');
+# define('FTP_PASSIVE', true);
+# define('FTP_BASE', '/');
+# define('FTP_CONTENT_DIR', '/wp-content/');
+# define('FTP_PLUGIN_DIR', '/wp-content/plugins/');
+# EOF
+# fi
 
 
 echo "Setting final permissions..."

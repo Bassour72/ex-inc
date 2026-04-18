@@ -4,10 +4,7 @@ RUN apk add --no-cache \
     php83 \
     php83-fpm \
     php83-mysqli \
-    php83-pgsql \
-    php83-sqlite3 \
     php83-session \
-    php83-json \
     wget
 
 WORKDIR /var/www/adminer

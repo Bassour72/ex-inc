@@ -1,7 +1,5 @@
 test file
  git clone git@github.com:Bassour72/ex-inc.git incpetion-push
- test file
- git clone git@github.com:Bassour72/ex-inc.git incpetion-push
  git clone git@github.com:Bassour72/ex-inc.git incpetion-push
  git clone git@github.com:Bassour72/ex-inc.git incpetion-push
  git clone git@github.com:Bassour72/ex-inc.git incpetion-push

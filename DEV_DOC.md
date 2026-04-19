@@ -332,7 +332,25 @@ This confirms secure configuration:
 
 5. Check environment:
    - `env`
+6. Check ftp
+  - curl ftp://localhost --user  (from `.env`):(from `secrets/ftp_user_password.txt`)
+  - echo "test file" > hello.txt
+  - curl -T hello.txt ftp://localhost --user  (from `.env`):(from `secrets/ftp_user_password.txt`)
+  - wget -m -nH -P wp-admin --ftp-user=(from `.env`) --ftp-password=(from `secrets/ftp_user_password.txt`) ftp://`ftp container ip address`/wp-admin
+  - curl -u  (from `.env`):(from `secrets/ftp_user_password.txt`) ftp://localhost/Makefile -o MyNewFile 
 
+7. Check tls
+# TLS 1.2
+  - curl -vk --tls-max 1.2 https://localhost
+  - curl -vk --tlsv1.2 https://localhost
+
+  # TLS 1.3
+  - curl -vk --tls-max 1.3 https://localhost
+  - curl -vk --tlsv1.3 https://localhost
+
+  # TLS 1.0 (should fail)
+  - curl -vk --tls-max 1.0 https://localhost
+  - curl -vk --tlsv1.0 https://localhost
 ---
 
 ### 19. Cleanup Commands

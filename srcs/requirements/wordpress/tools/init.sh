@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Load secrets
+
 SQL_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
@@ -44,8 +44,6 @@ fi
 
 echo "Setting final permissions..."
 chown -R myuser:mygroup /var/www/wordpress
-
-# chown -R myuser:myuser /var/www/wordpress
 
 find /var/www/wordpress -type d -exec chmod 755 {} \;
 find /var/www/wordpress -type f -exec chmod 644 {} \;

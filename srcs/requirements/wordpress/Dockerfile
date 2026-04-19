@@ -19,9 +19,6 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     && mv wp-cli.phar /usr/local/bin/wp
 
 
-
-# RUN adduser -D -u 1000 myuser || true
-# Create a system group and user with a fixed ID
 RUN addgroup -S mygroup && adduser -S -G mygroup -u 1000 myuser
 
 

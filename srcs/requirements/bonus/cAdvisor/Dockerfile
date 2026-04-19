@@ -3,7 +3,6 @@ FROM alpine:3.22
 RUN apk add --no-cache \
     libc6-compat \
     device-mapper \
-    # findutils \
     curl
 
 RUN curl -L https://github.com/google/cadvisor/releases/download/v0.55.0/cadvisor-v0.55.0-linux-amd64 \

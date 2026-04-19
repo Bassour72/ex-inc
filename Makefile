@@ -1,8 +1,7 @@
-
+DATA_PATH = /home/ybassour/data
 all:
-	@mkdir -p /home/${USER}/data/mariadb
-	@mkdir -p /home/${USER}/data/wordpress
-
+	@mkdir -p $(DATA_PATH)/mariadb
+	@mkdir -p $(DATA_PATH)/wordpress
 	@docker compose -f ./srcs/docker-compose.yml up -d --build
 
 up: all
@@ -15,17 +14,14 @@ down:
 clean:
 	@docker compose -f srcs/docker-compose.yml down --rmi all -v
 
-fclean: clean
-#	@sudo docker system prune -a --volumes
-	@docker rmi $$(docker images -q --filter "reference=mariadb" --filter "reference=wordpress" --filter "reference=nginx" --filter "reference=redis" --filter "reference=static_site" --filter "reference=cadvisor" --filter "reference=adminer" --filter "reference=ftp") 2>/dev/null || true
-	@docker system prune -f --volumes
-
-
-	@sudo rm -rf /home/${USER}/data/mariadb
-	@sudo rm -rf /home/${USER}/data/wordpress
-	
-	@sudo rm -rf /home/${USER}/data/redis
-	@sudo rm -rf /home/${USER}/data/advisor
+fclean:
+	@echo "Stopping containers and removing volumes..."
+	@docker compose -f srcs/docker-compose.yml down --rmi all -v
+	@echo "Cleaning system and orphan volumes..."
+	@docker system prune -af --volumes
+	@echo "Deleting persistent data directories..."
+	@sudo rm -rf $(DATA_PATH)
+	@echo "Full cleanup complete."
 
 
 re: fclean all

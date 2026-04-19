@@ -13,6 +13,8 @@ Once the infrastructure is running, the services are available through your brow
 - **cAdvisor (Container Monitoring)**  
   https://ybassour.42.fr/cadvisor
 
+- **static_site (static site)**  
+  https://ybassour.42.fr/static_site
 
 ---
 
@@ -20,20 +22,17 @@ Once the infrastructure is running, the services are available through your brow
 
 ### WordPress Setup
 - Open the main website
-- Choose language
 - Enter:
-  - Site title
-  - Admin username
+  - Username | Email
   - Password
-  - Email
 - Login to dashboard and start managing content
 
 
 ### Adminer Login
-- System: MySQL  
+- System: MySQL / Mariadb
 - Server: mariadb  
 - Username: (from `.env`)  
-- Password: (from `.env`)  
+- Password: (from `secrets/db_password.txt`)  
 - Database: (from `.env`)  
 
 
@@ -67,7 +66,8 @@ Once the infrastructure is running, the services are available through your brow
 
 - Connect using an FTP client  
 - Host: ybassour.42.fr  
-- Username/Password: from `.env`  
+- Username: (from `.env`)  
+- Password: (from `secrets/ftp_user_password.txt`)   
 - Access WordPress files inside the container volume  
 
 
@@ -82,6 +82,7 @@ All services are accessed through a single entry point:
   - `/` → WordPress  
   - `/adminer` → Adminer container  
   - `/cadvisor` → cAdvisor container  
+  - `/static_site` → static_site 
 
 This means:
 - Users never access containers directly  

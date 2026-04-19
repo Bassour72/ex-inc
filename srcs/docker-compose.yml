@@ -49,6 +49,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+      start_period: 60s
 
   wordpress:
     container_name: wordpress
@@ -131,7 +132,6 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
-
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /dev/disk/:/dev/disk:ro
     devices:

@@ -2,8 +2,6 @@
 all:
 	@mkdir -p /home/${USER}/data/mariadb
 	@mkdir -p /home/${USER}/data/wordpress
-	@mkdir -p /home/${USER}/data/redis
-	@mkdir -p /home/${USER}/data/advisor
 
 	@docker compose -f ./srcs/docker-compose.yml up -d --build
 

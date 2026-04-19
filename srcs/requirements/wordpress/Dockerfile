@@ -18,10 +18,11 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-# RUN sed -i 's/user = .*/user = 1000/g' /etc/php83/php-fpm.d/www.conf && \
-#     sed -i 's/group = .*/group = 1000/g' /etc/php83/php-fpm.d/www.conf
 
-RUN adduser -D -u 1000 myuser || true
+
+# RUN adduser -D -u 1000 myuser || true
+# Create a system group and user with a fixed ID
+RUN addgroup -S mygroup && adduser -S -G mygroup -u 1000 myuser
 
 
 COPY conf/www.conf /etc/php83/php-fpm.d/www.conf

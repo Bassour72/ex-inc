@@ -42,28 +42,10 @@ if [ ! -f "wp-config.php" ]; then
 fi
 
 
-sed -i "/FS_METHOD/d" wp-config.php
-sed -i "/FTP_/d" wp-config.php
-
-
-
-# if ! grep -q "FTP_HOST" wp-config.php; then
-#     echo "Adding FTP configuration to wp-config.php..."
-#     cat << EOF >> wp-config.php
-# define('FS_METHOD', 'ftpext');
-# define('FTP_HOST', 'ftp:21');
-# define('FTP_USER', '${FTP_USER}');
-# define('FTP_PASS', '${FTP_PWD}');
-# define('FTP_PASSIVE', true);
-# define('FTP_BASE', '/');
-# define('FTP_CONTENT_DIR', '/wp-content/');
-# define('FTP_PLUGIN_DIR', '/wp-content/plugins/');
-# EOF
-# fi
-
-
 echo "Setting final permissions..."
-chown -R nobody:nobody /var/www/wordpress
+chown -R myuser:mygroup /var/www/wordpress
+
+# chown -R myuser:myuser /var/www/wordpress
 
 find /var/www/wordpress -type d -exec chmod 755 {} \;
 find /var/www/wordpress -type f -exec chmod 644 {} \;

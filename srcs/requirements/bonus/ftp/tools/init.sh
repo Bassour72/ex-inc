@@ -4,7 +4,7 @@ set -e
 
 FTP_PWD=$(cat /run/secrets/ftp_user_password)
 echo "Mandatory directory for vsftpd to run.."
-mkdir -p /var/run/vsftpd/empty
+# mkdir -p /var/run/vsftpd/empty
 echo "Create the FTP user..."
 
 if ! id "$FTP_USER" >/dev/null 2>&1; then

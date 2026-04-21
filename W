@@ -1,0 +1,42 @@
+wget -m -nH --ftp-user=myuser --ftp-password=mypassword123 ftp://172.18.0.9/wp-admin
+curl ftp://172.18.0.9 --user myuser:mypassword123
+curl ftp://localhost/AI --user myuser:mypassword123
+curl -T AI ftp://localhost --user myuser:mypassword123
+curl -T AI ftp://172.18.0.9 --user myuser:mypassword123
+curl -T inception,crt ftp://172.18.0.9 --user myuser:mypassword123
+curl -T inception.crt ftp://172.18.0.9 --user myuser:mypassword123
+curl ftp://172.18.0.9/AI --user myuser:mypassword123
+curl ftp://172.18.0.9/inception.crt --user myuser:mypassword123
+curl ftp://172.18.0.8 --user myuser:mypassword123
+curl ftp://172.18.0.8/inception.crt --user myuser:mypassword123
+curl -T inception.crt ftp://172.18.0.8 --user myuser:mypassword123
+curl ftp://localhost/inception.crt --user myuser:mypassword123
+curl ftp://localhost --user myuser:mypassword123
+curl -T Makefile ftp://localhost --user myuser:mypassword123
+docker exec -it ftp ifconfig
+make
+make re
+makedocker
+docker exec -it ftp sh
+docker container logs
+docker container logs wordpress
+docker container logs ftp
+docker container logs mariadb
+docker container logs cadvisor
+docker logs ftp
+docker ps
+ls
+clear
+CLEAR
+curl ftp://localhost/index.php --user myuser:mypassword123
+curl ftp://localhost/AI --user myuser:mypassword123
+curl ftp://172.18.0.8/AI --user myuser:mypassword123
+curl ftp://172.18.0.8/ --user myuser:mypassword123
+curl ftp://172.18.0.9/ --user myuser:mypassword123
+history
+
+
+
+
+
+

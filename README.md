@@ -1,282 +1,374 @@
 *This project has been created as part of the 42 curriculum by **[ybassour]**.*
 
-## 📌 Project Overview
-Inception is a system administration project from 42 School that introduces Docker and container orchestration.  
-The goal is to build a secure, multi-container infrastructure running a WordPress website using Docker Compose, without relying on pre-built images.
+## 📝 Description
 
-# 🧱 Fundamentals
+Inception is a system administration project focused on building a secure, multi-container infrastructure using Docker and Docker Compose.
 
-## What is Containerization # DONE
-    Containerization is a method used to package an application with its dependencies, allowing it to run consistently across different environments. 
+The main objective is to deploy a complete web environment composed of multiple isolated services, including:
+- Nginx (reverse proxy with TLS)
+- WordPress (application)
+- MariaDB (database)
+- Redis (cache)
+- FTP, Adminer, Static Site, and cAdvisor (bonus services)
 
-## What is Virtualization # DONE
-    Virtualization allows running multiple virtual machines (VMs), each with its own OS and resources.
+Each service runs inside its own container, ensuring isolation, portability, and reproducibility across environments.
 
-## What is a Hypervisor # DONE
-    A hypervisor is the software that creates and manages virtual machines.
+### 🐳 Use of Docker
 
-## Docker # DONE
-    Docker is an open-source platform used to build, run, and manage containers.
+Docker is used to:
+- Build custom images using Dockerfiles (no pre-built images allowed)
+- Run services in isolated containers
+- Manage communication via a private bridge network
+- Persist data using Docker volumes
+- Orchestrate the entire infrastructure using Docker Compose
 
-## Virtual Machines (VMs) # DONE
-    VMs are isolated systems that include a full operating system.
+This approach eliminates environment inconsistencies and ensures the project runs identically on any machine.
 
-## Containers # DONE
-    A container is a lightweight runtime environment that includes everything needed to run an application.
+### 🏗️ Design Choices
 
-## Docker Image # DONE
-    A Docker image is an immutable file that contains the application and its environment.  # DONE
+- **Reverse Proxy (Nginx):** Acts as a single entry point and handles TLS (HTTPS)
+- **Private Network:** Services communicate internally using Docker DNS (service names)
+- **Volumes:** Ensure data persistence for WordPress and MariaDB
+- **TLS (HTTPS):** Secures all external communication
+- **Separation of Services:** Each component runs in its own container for modularity and scalability
 
-## Docker Container # DONE
-A container is a running instance of a Docker image.
 
-## Difference Between Image and Container # DONE
-    - Image = blueprint (static)
-    - Container = running instance (dynamic)
+## 🚀 Instructions
 
-# ⚙️ Docker Architecture
+### 📋 Prerequisites
 
-## Docker Architecture (Client, Daemon, Registry)  # DONE
-    - Client sends commands
-    - Daemon processes requests
-    - Registry stores images
+Before starting, ensure your environment is correctly set up:
 
-## Docker Workflow (Build → Ship → Run) # DONE
-    1. Build image
-    2. Push to registry
-    3. Run container
+- Docker
+- Docker Compose
+- Make (recommended for automation)
+- Sudo privileges (required on most systems)
 
----
+Verify installation:
 
-# 🏗️ Docker Build System
-
-## Dockerfile Overview # DONE
-    Defines how to build an image.
-
-## Docker Build Process # DONE
-    Docker reads the Dockerfile and creates image layers.
-
-## Docker Layers and Caching # DONE
-    Each instruction creates a layer. Cached layers improve performance.
+- `docker --version`
+- `docker compose version`
+- `make --version`
 
 ---
 
-# 🧩 Docker Compose & Multi-Container
+### 🖥️ Host Configuration
 
-## Docker Compose Overview # DONE
-    Tool to manage multiple containers using a YAML file.
+Map your domain to localhost:
 
-## Multi-Container Architecture # DONE
-    Each service runs in its own container.
+```bash
+echo "127.0.0.1 ybassour.42.fr" | sudo tee -a /etc/hosts
+```
 
-## Service Definition in Docker Compose # DONE
-    Defines image, ports, volumes, and dependencies.
-
-## Dependency Management Between Services # DONE
-    Controls startup order and communication between containers.
+Make sure no other services (Apache, Nginx, etc.) are using ports **80** or **443**.
 
 ---
 
-# 🔄 Container Lifecycle
+### 🛠️ Step-by-Step Setup
 
-## Container Lifecycle # DONE
-    - Create
-    - Start
-    - Stop
-    - Remove
+#### 1. Clone the Repository
 
-## Container Restart Policies # DONE
-    Defines behavior when a container stops.
+```bash
+git clone <repository_url> inception
+cd inception
+```
 
 ---
 
-# 🌐 Docker Networking
+#### 2. Configure Environment
 
-## Docker Networking Basics # DONE
-    Containers communicate using networks.
+Create your `.env` file:
 
-## Bridge Network (Default)  # DONE
-    Private internal network for containers.
- 
-## Container Communication (DNS, Service Names) # DONE
-    Containers communicate using service names (not IP).
+```bash
+cp .env.example .env
+```
 
-## Port Mapping (Host vs Container Ports) # DONE
-    Maps container ports to host ports (e.g., 443 → 8080).
+Edit it with your credentials:
 
-## Internal vs External Access # DONE
-    - Internal: container-to-container
-    - External: user to container via exposed ports
+- Database user/password  
+- WordPress admin credentials  
+- Domain name  
+- FTP credentials  
 
 ---
 
-# 💾 Docker Storage
+#### 3. Build & Launch the Infrastructure
 
-## Docker Volumes  # DONE
-    Managed storage for persistent data.
+Using **Make (recommended):**
 
-## Data Persistence in Containers  # DONE
-    Data survives container deletion.
+```bash
+make
+```
 
-## Volumes vs Bind Mounts  # DONE
-    - Volume: managed by Docker
-    - Bind mount: linked to host path
+Or directly with Docker:
 
-## Volume Use Cases # DONE
-    - Databases (MariaDB)
-    - CMS data (WordPress)
+```bash
+docker compose up -d --build
+```
 
----
+This will:
 
-# 🔒 Isolation & Resources
-
-## Docker Isolation (Namespaces & Cgroups) # DONE
-    - Namespaces isolate processes
-    - Cgroups control resources
-
-## Resource Management (CPU, Memory Limits) # DONE
-    Limits container resource usage.
+- Build all Docker images from scratch  
+- Create the Docker network  
+- Initialize volumes (persistent storage)  
+- Start all containers in detached mode  
 
 ---
 
-# 🔑 Configuration & Secrets
+### 🌐 Accessing the Services
 
-## Environment Variables in Docker # DONE
-    Used for configuration.
+Once containers are running, access services via your browser:
 
-## Secrets Management (vs ENV)  # DONE
-    Secrets are more secure than environment variables.
+| Service            | URL                                      |
+|--------------------|------------------------------------------|
+| Main Website       | https://ybassour.42.fr                   |
+| WordPress Admin    | https://ybassour.42.fr/wp-admin/         |
+| Adminer            | https://ybassour.42.fr/adminer           |
+| Static Site        | https://ybassour.42.fr/static_site       |
+| cAdvisor           | https://ybassour.42.fr/cadvisor          |
 
----
+**Notes:**
 
-# 📊 Monitoring & Debugging
-
-## Docker Logs and Monitoring # DONE
-    View container logs and metrics.
-
-## Healthchecks in Docker # DONE
-    Check if container is running correctly.
-
-## Debugging Containers # DONE
-    Tools and logs used to troubleshoot issues.
+- All traffic goes through **Nginx (reverse proxy)** on port **443**  
+- Internal services are **not exposed directly**  
+- Routing is handled via Nginx configuration  
 
 ---
 
-# 🛡️ Security
+### 🔧 Docker Concepts in Practice
 
-## Docker Security Basics # DONE
-    Basic practices to secure containers.
+This project demonstrates key Docker concepts:
 
-## Image Security and Minimal Base Images # DONE
-    Use small, trusted images.
+- **Bridge Network:** Containers communicate using service names (DNS)  
+- **Volumes:** Data persists outside containers  
+- **Isolation:** Each service runs in its own container  
+- **Reverse Proxy:** Nginx routes traffic securely using TLS  
 
-## Container Isolation Risks # DONE
-    Containers share kernel → weaker than VMs.
+Example internal communication:
 
----
-
-# ⚖️ Comparison
-
-## Docker vs Virtual Machines  # DONE
-
-|  Feature  |    VMs   | Containers |
-|-----------|----------|------------|
-| Size      | Large    | Small      |
-| Speed     | Slow     | Fast       |
-| Isolation | Strong   | Moderate   |
-
-## Advantages and Limitations of Docker # DONE
-    - Fast and lightweight
-    - Less isolation than VMs
+- `mariadb:3306`  
+- `wordpress:9000`  
+- `cadvisor:8080`  
 
 ---
 
-# 🌍 Services in Inception
+### 🧹 Maintenance & Shutdown
 
-## Nginx # DONE
-    Reverse proxy and entry point handling HTTPS.
+Stop containers (keep data):
 
-## MariaDB # DONE
-    Database system storing WordPress data.
+```bash
+docker compose stop
+```
 
-## Redis # DONE
-    In-memory cache for performance.
+or:
 
-## FTP # DONE
-    Used to manage files in containers.
-
-## WordPress # DONE
-    Content management system.
-
-## Adminer # DONE
-    Web-based database management tool.
-
-## Static Site # DONE
-    Serves static HTML/CSS content.
-
-## cAdvisor # DONE
-    Monitors container resource usage.
+```bash
+make down
+```
 
 ---
 
-# 🔐 TLS (HTTPS)
+Stop and remove containers (keep volumes):
 
-## What is TLS # DONE
-    TLS secures communication between client and server.
-
-## HTTP vs HTTPS # DONE
-    - HTTP: not secure
-    - HTTPS: encrypted using TLS
-
-## TLS Handshake # DONE
-    1. Client Hello  
-    2. Server Hello  
-    3. Certificate Verification  
-    4. Key Exchange  
-    5. Session Key Creation  
-
-## Certificates   # DONE
-    Contain public key and server identity.
-
-## Certificate Authority (CA) # DONE
-    Trusted entity that signs certificates.
-
-## Self-Signed vs Trusted Certificate # DONE
-    - Self-signed: not trusted by browsers  
-    - Trusted: signed by CA  
-
-## Encryption # DONE
-    - Symmetric: fast, used after handshake  
-    - Asymmetric: used during handshake  
-
-## TLS Termination # DONE
-    Nginx handles encryption and forwards requests internally.
-
-## Port 443 # DONE
-    Standard port for HTTPS.
-
-## Reverse Proxy with TLS # DONE
-    Nginx decrypts traffic and routes to containers.
-
-## Security Benefits # DONE
-    - Encryption  
-    - Integrity  
-    - Authentication  
-
-## Common Vulnerabilities # DONE
-    - MITM attacks  
-    - Weak ciphers  
-    - Invalid certificates  
-
-## Best Practices # DONE
-    - Use TLS 1.2/1.3  
-    - Disable weak ciphers  
-    - Redirect HTTP → HTTPS  
-
-## OpenSSL # DONE
-    Used to generate certificates and keys.
+```bash
+docker compose down
+```
 
 ---
 
-## 🤖 AI Usage Disclosure # DONE
-    The theoretical content and structural organization of this README file were drafted and formatted with the assistance of AI to ensure clear and concise explanations of the project's technical concepts.
+Full cleanup (⚠️ deletes all data):
+
+```bash
+docker compose down -v
+```
+
+or:
+
+```bash
+make fclean
+```
+
+---
+
+Optional deep cleanup:
+
+```bash
+docker system prune -a --volumes
+```
+
+---
+
+### 🔍 Debugging & Monitoring
+
+View logs:
+
+```bash
+docker compose logs -f
+```
+
+Check running containers:
+
+```bash
+docker compose ps
+```
+
+Access a container shell:
+
+```bash
+docker exec -it <container_name> sh
+```
+
+Test internal connectivity:
+
+```bash
+docker exec -it nginx ping wordpress
+docker exec -it nginx wget -qO- http://cadvisor:8080
+```
+
+Check Nginx configuration:
+
+```bash
+docker exec -it nginx nginx -t
+```
+
+---
+
+### 📊 Monitoring
+
+Access container metrics:
+
+- **cAdvisor → https://ybassour.42.fr/cadvisor**
+
+Provides:
+
+- CPU usage  
+- Memory usage  
+- Network activity  
+
+---
+
+### 💡 Troubleshooting
+
+Common issues and causes:
+
+**Site not loading**  
+→ Check Nginx logs  
+
+**Database connection error**  
+→ Verify `.env` credentials and MariaDB container  
+
+**Service unreachable**  
+→ Ensure containers are in the same Docker network  
+
+**Permission issues**  
+→ Check volume ownership and container user  
+
+---
+
+### ⚠️ Notes
+
+- Containers communicate using **service names**, not IPs  
+- Data is stored in **Docker volumes**, not containers  
+- TLS is handled by **Nginx (port 443)**  
+- Self-signed certificates may trigger browser warnings (this is normal)  
+
+---
+
+
+## 📚 Resources
+
+### 📖 Official Documentation
+
+- Docker Documentation: https://docs.docker.com  
+- Docker Compose Documentation: https://docs.docker.com/compose/  
+- Nginx Documentation: https://nginx.org/en/docs/  
+- MariaDB Documentation: https://mariadb.org/documentation/  
+- OpenSSL Documentation: https://www.openssl.org/docs/  
+
+---
+
+### 📘 Learning Resources
+
+- Nigel Poulton, *Docker Deep Dive: Zero to Docker in a Single Book*  
+- SQL Introduction (W3Schools): https://www.w3schools.com/sql/  
+
+---
+
+### 🎥 Video Tutorials
+
+- Docker Deep Dive Course — Nigel Poulton (YouTube)  
+  https://www.youtube.com/watch?v=WDMZK5DeGSA
+  https://www.youtube.com/watch?v=PrusdhS2lmo&t=21937s
+
+- TLS / SSL Explained — (YouTube)  
+  https://www.youtube.com/playlist?list=PLdTZTP1X_y5p0_9mwIWDdFxlF5N_Q_iWj
+  https://www.youtube.com/watch?v=ZkL10eoG1PY&t=1045s
+
+- How HTTPS Works — Practical Networking (YouTube)  
+  https://www.youtube.com/watch?v=EnY6fSng3Ew
+
+> These resources were used for conceptual understanding of Docker architecture, TLS, and networking principles.
+
+---
+
+### 🤖 AI Usage Disclosure
+
+AI tools (ChatGPT / Claude) were used in this project for:
+
+- **Conceptual explanations**  
+  Understanding Docker architecture, networking, TLS, and FastCGI vs HTTP  
+
+- **Debugging assistance**  
+  Troubleshooting issues related to Alpine Linux packages, PHP-FPM configuration, and WP-CLI setup  
+
+- **Documentation structuring**  
+  Improving clarity, organization, and formatting of the README and technical documentation  
+
+AI was not used to generate core project logic or configuration blindly.  
+All configurations and implementations were reviewed, tested, and validated manually.
+
+# 🏗️ Design Choices & Comparisons
+
+This project required several architectural decisions. Below are the main choices and the reasoning behind them.
+
+---
+
+## 🖥️ Virtual Machines vs Docker
+
+- Virtual Machines run a full OS → heavy and slow  
+- Docker containers share the host kernel → lightweight and fast  
+
+✔ Choice: Docker  
+Reason: Faster startup, lower resource usage, and easier service isolation.
+
+---
+
+## 🔐 Secrets vs Environment Variables
+
+- Environment variables are easy to use but exposed in container configuration  
+- Secrets are more secure and not stored in image layers  
+
+✔ Choice: Secrets for sensitive data (passwords), `.env` for configuration  
+Reason: Prevent leaking credentials while keeping flexibility.
+
+---
+
+## 🌐 Docker Network vs Host Network
+
+- Host network exposes services directly to the host  
+- Docker bridge network isolates containers in a private network  
+
+✔ Choice: Bridge network  
+Reason: Better security and controlled communication using service names (DNS).
+
+---
+
+## 💾 Docker Volumes vs Bind Mounts
+
+- Volumes are managed by Docker → reliable and portable  
+- Bind mounts depend on host paths → less portable  
+
+✔ Choice: Volumes (with optional bind mount for development)  
+Reason: Ensure persistent and stable storage for MariaDB and WordPress data.
+
+---

@@ -13,7 +13,7 @@ if [ ! -f "wp-config.php" ]; then
     echo "WordPress not found. Starting installation..."
 
     if [ ! -f "wp-settings.php" ]; then
-        php83 -d memory_limit=-1 /usr/local/bin/wp core download --allow-root
+         /usr/local/bin/wp core download --allow-root
     fi
 
     php83 -d memory_limit=-1 /usr/local/bin/wp config create --allow-root \

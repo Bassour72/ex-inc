@@ -1,6 +1,6 @@
 FROM alpine:3.21
 
-RUN apk update && apk add --no-cache redis
+RUN apk add --no-cache redis
 
 RUN mkdir -p /data && chown redis:redis /data
 

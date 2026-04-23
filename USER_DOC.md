@@ -173,26 +173,29 @@ System location:
 * Volumes store all persistent data
 * Removing volumes deletes data permanently
 
----
 
 # 8. Access URLs (User Services)
 
-Once running, services are accessible via:
+Once the infrastructure is running, services are accessible via:
 
-* WordPress:
-  [https://ybassour.42.fr](https://ybassour.42.fr)
+- 🌐 **WordPress**  
+  https://ybassour.42.fr  
 
-* Adminer:
-  [https://ybassour.42.fr/adminer](https://ybassour.42.fr/adminer)
+- ⚙️ **WordPress Administration Panel**  
+  https://ybassour.42.fr/wp-admin  
 
-* cAdvisor:
-  [https://ybassour.42.fr/cadvisor](https://ybassour.42.fr/cadvisor)
+- 🗄️ **Adminer**  
+  https://ybassour.42.fr/adminer  
 
-* Static site:
-  [https://ybassour.42.fr/static_site](https://ybassour.42.fr/static_site)
+- 📊 **cAdvisor**  
+  https://ybassour.42.fr/cadvisor  
+
+- 📄 **Static Site**  
+  https://ybassour.42.fr/static_site  
 
 ---
 
+Users can access the main website, administration panel, and all additional services through their respective URLs.
 # 9. Service Architecture
 
 All traffic goes through Nginx (port 443 HTTPS).

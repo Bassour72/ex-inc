@@ -1,4 +1,6 @@
 # 🛠️ Developer Documentation
+This project is part of the 42 curriculum. It explains how to set up, build, and manage the Inception infrastructure using Docker and Docker Compose.
+
 ---
 ### Project Structure
 
@@ -48,12 +50,6 @@
 
 ---
 
-### Supporting Directory
-
-- `requirements/` →  
-  Contains Dockerfiles and configuration files for each service  
-
----
 
 ### Key Concepts
 
@@ -63,35 +59,68 @@
 - Configuration is centralized using `.env`  
 
 ---
-## 19. Project Setup & Management
 
-### 1. Prerequisites
+
+###  Prerequisites
 
 Make sure the following tools are installed:
 
-- Docker
-- Docker Compose
+Required tools:
+
+- Docker Engine
+- Docker Compose v2+
 - Make
+- Git
+- sudo privileges
 
-Verify installation:
+### Verify installation:
 
-- `docker --version`
-- `docker compose version`
-- `make --version`
+```bash
+docker --version
+docker compose version
+make --version
+```
 
 ---
 
-### 2. Initial Setup
+### . Initial Setup
 
 Before running the project:
 
-1. Clone the repository  
-2. Create and configure `.env` file:
-   - Database credentials  
-   - WordPress configuration  
-   - FTP credentials  
-   - cAdvisor credentials  
+### Clone repository
 
+```bash
+git clone <repository_url> inception
+cd inception
+``` 
+### Create environment file
+
+```bash
+cp .env.example .env
+```
+
+The `.env` file contains:
+
+- Database credentials
+- WordPress configuration
+- Domain name
+### Secrets
+
+Sensitive data is stored in:
+
+```
+/secrets/
+```
+
+Examples:
+
+- db_password.txt
+- wp_admin_password.txt
+
+Secrets are injected at runtime and are never included in Docker images.
+
+---
+### directories exist
 3. Ensure required directories exist:
    - Volumes (e.g. `/home/${USER}/data/` if using bind mounts)  
 
@@ -107,23 +136,120 @@ Before running the project:
 - `mariadb/` → Database configuration  
 - `requirements/` → Dockerfiles and configs  
 
+├── DEV_DOC.md
+├── Makefile
+├── README.md
+├── secrets
+│   ├── credentials.txt
+│   ├── db_password.txt
+│   ├── db_root_password.txt
+│   ├── ftp_user_password.txt
+│   ├── wp_admin_password.txt
+│   └── wp_user_password.txt
+├── srcs
+│   ├── docker-compose.yml
+│   └── requirements
+│       ├── bonus
+│       │   ├── Adminer
+│       │   │   ├── conf
+│       │   │   │   └── www.conf
+│       │   │   └── Dockerfile
+│       │   ├── cAdvisor
+│       │   │   ├── Dockerfile
+│       │   │   └── tools
+│       │   │       └── entrypoint.sh
+│       │   ├── ftp
+│       │   │   ├── conf
+│       │   │   │   └── vsftpd.conf
+│       │   │   ├── Dockerfile
+│       │   │   └── tools
+│       │   │       └── init.sh
+│       │   ├── redis
+│       │   │   ├── Dockerfile
+│       │   │   └── tools
+│       │   │       └── init.sh
+│       │   └── static_site
+│       │       ├── conf
+│       │       │   └── nginx.conf
+│       │       ├── Dockerfile
+│       │       └── tools
+│       │           └── Static_site
+│       │               ├── images
+│       │               │   ├── about.png
+│       │               │   ├── background.png
+│       │               │   ├── contact.png
+│       │               │   ├── course.png
+│       │               │   ├── facebook.png
+│       │               │   ├── instagram.png
+│       │               │   ├── linkedin.png
+│       │               │   ├── logo.png
+│       │               │   ├── menu.png
+│       │               │   ├── offer.png
+│       │               │   ├── pic-1.png
+│       │               │   ├── pic-2.png
+│       │               │   ├── pic-3.png
+│       │               │   ├── search.html
+│       │               │   ├── Thumbs.db
+│       │               │   └── twitter.png
+│       │               ├── index.html
+│       │               ├── style.css
+│       │               └── test-image.jpg
+│       ├── mariadb
+│       │   ├── Dockerfile
+│       │   └── tools
+│       │       └── init.sh
+│       ├── nginx
+│       │   ├── conf
+│       │   │   └── nginx.conf
+│       │   ├── Dockerfile
+│       │   └── tools
+│       │       └── init.sh
+│       └── wordpress
+│           ├── conf
+│           │   ├── uploads.ini
+│           │   └── www.conf
+│           ├── Dockerfile
+│           └── tools
+│               └── init.sh
+└── USER_DOC.md
+
 ---
 
-### 4. Build & Run the Project
+### . Build & Run the Project
 
-- `make`
+```bash
+make
+```
+
+### Using Docker Compose
+
+```bash
+docker compose up -d --build
+```
 
 This will:
 
-- Build all Docker images  
-- Create network and volumes  
-- Start all containers  
+- Build Docker images
+- Create network and volumes
+- Start all containers
 
 ---
 
-### 5. Restart the Project
+###  Restart the Project
 
 - `make re`
+
+This will:
+
+- Rebuild all images  
+- Restart all containers  
+
+---
+
+
+###  Using Docker Compose
+
+- ` docker compose down -v`
 
 This will:
 
@@ -143,8 +269,18 @@ This will:
 - Keep volumes (data is preserved)  
 
 ---
+### 6. Using Docker Compose
 
-### 7. Stop & Remove the Project
+- `docker compose down`
+
+This will:
+
+- Stop all containers  
+- Remove containers and network  
+- Keep volumes (data is preserved)  
+
+---
+### . Stop & Remove the Project
 
 Remove everything (containers, images, volumes):
 
@@ -162,161 +298,76 @@ This will:
 - MariaDB database  
 
 ---
+### . Using Docker Compose
 
-### 8. Container Management Commands
+Remove everything (containers, images, volumes):
 
-- `docker ps` → Running containers  
-- `docker ps -a` → All containers  
-- `docker logs <container>` → View logs  
-- `docker exec -it <container> sh` → Access container shell  
+- `docker compose -f srcs/docker-compose.yml down --rmi all -v`
+
+This will:
+
+- Stop and remove all containers  
+- Remove Docker images  
+- Remove volumes  
+
+⚠️ This will permanently delete:
+
+- WordPress data  
+- MariaDB database  
+
+---
+#  Data Storage & Persistence
+
+## Where Data Is Stored
+
+* Docker volumes:
+
+  * MariaDB → `/var/lib/mysql`
+  * WordPress → `/var/www/wordpress`
+
+* Host system (optional bind mount):
+
+  ```
+  /home/${USER}/data/
+  ```
+
+* Docker internal storage:
+
+  ```
+  /var/lib/docker/volumes/
+  ```
+
+## Persistence Rules
+
+* Containers are **ephemeral**
+* Data lives in **volumes only**
+* Removing volumes = **permanent data loss**
 
 ---
 
-### 9. Networking & Connectivity
+#  Access URLs (User Services)
 
-Containers communicate using **service names (DNS)**:
+Once the infrastructure is running, services are accessible via:
 
-- Example: `mariadb:3306`, `cadvisor:8080`
+- 🌐 **WordPress**  
+  https://ybassour.42.fr  
 
----
+- ⚙️ **WordPress Administration Panel**  
+  https://ybassour.42.fr/wp-admin  
 
-Test connectivity:
+- 🗄️ **Adminer**  
+  https://ybassour.42.fr/adminer  
 
-- `docker exec -it nginx ping cadvisor`  
-- `docker exec -it nginx wget -qO- http://cadvisor:8080`
+- 📊 **cAdvisor**  
+  https://ybassour.42.fr/cadvisor  
 
----
-
-Notes:
-
-- Commands must run inside a container  
-- Host machine cannot access internal service names  
-- If HTTP works but ping fails → normal  
+- 📄 **Static Site**  
+  https://ybassour.42.fr/static_site  
 
 ---
 
-### 10. Port Mapping
-
-Only Nginx exposes a port to the host:
-
-- `443:443`  
-
-Internal services:
-
-- WordPress → `9000`  
-- MariaDB → `3306`  
-- cAdvisor → `8080`  
-
-These ports are only accessible inside the Docker network.
-
----
-
-### 11. Service Dependencies
-
-- WordPress depends on MariaDB  
-- Nginx depends on WordPress  
-
-Docker Compose controls startup order, but not readiness.
-
----
-
-### 12. Volume Management
-
-- `docker volume ls` → List volumes  
-- `docker volume inspect <name>` → Inspect volume  
-- `docker volume prune` → Remove unused volumes  
-
----
-
-### 13. Data Persistence
-
-Stored in Docker volumes:
-
-- WordPress → `/var/www/wordpress`  
-- MariaDB → `/var/lib/mysql`  
-
-Properties:
-
-- Persists after container restart  
-- Deleted only with `make fclean` or manual removal  
-
----
-
-### 14. Environment Variables
-
-- `docker exec -it <container> env`  
-- `docker inspect <container>`  
-
-Used for:
-
-- Debugging configuration  
-- Verifying `.env` values  
-
----
-
-### 15. Nginx Debugging
-
-- `docker exec -it nginx nginx -t` → Test config  
-- `docker exec -it nginx nginx -s reload` → Reload service  
-
----
-
-### 16. Monitoring
-
-Access:
-
-- https://ybassour.42.fr/cadvisor  
-
-Provides:
-
-- CPU usage  
-- Memory usage  
-- Network activity  
-
----
-
-### 17. TLS Version Testing
-
-Test supported TLS versions:
-
----
-
-TLS 1.0 (should FAIL ❌):
-
-- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1`
-
----
-
-TLS 1.1 (should FAIL ❌):
-
-- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_1`
-
----
-
-TLS 1.2 (should SUCCESS ✅):
-
-- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_2`
-
----
-
-TLS 1.3 (should SUCCESS ✅):
-
-- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_3`
-
----
-
-Expected behavior:
-
-- TLS 1.0 / 1.1 → connection fails  
-- TLS 1.2 / 1.3 → connection succeeds  
-
-This confirms secure configuration:
-
-- `ssl_protocols TLSv1.2 TLSv1.3;`
-
----
-
-### 18. Common Debugging Workflow
+Users can access the main website, administration panel, and all additional services through their respective URLs.
+###  Common Debugging Workflow
 
 1. Check containers:
    - `docker ps`
@@ -358,5 +409,94 @@ This confirms secure configuration:
 - `make fclean` → Full reset  
 - `docker system prune -a` → Remove unused resources  
 - `docker volume prune` → Remove unused volumes  
+
+---
+
+###  Container Management Commands
+
+- `docker ps` → Running containers  
+- `docker ps -a` → All containers  
+- `docker logs <container>` → View logs  
+- `docker exec -it <container> sh` → Access container shell  
+
+---
+
+###  Networking & Connectivity
+
+Containers communicate using **service names (DNS)**:
+
+- Example: `mariadb:3306`, `cadvisor:8080`
+
+---
+
+Test connectivity:
+
+- `docker exec -it nginx ping cadvisor`  
+- `docker exec -it nginx wget -qO- http://cadvisor:8080`
+
+---
+
+Notes:
+
+- Commands must run inside a container  
+- Host machine cannot access internal service names  
+- If HTTP works but ping fails → normal  
+
+---
+
+###  Volume Management
+
+- `docker volume ls` → List volumes  
+- `docker volume inspect <name>` → Inspect volume  
+- `docker volume prune` → Remove unused volumes  
+
+---
+
+###  Environment Variables
+
+- `docker exec -it <container> env`  
+- `docker inspect <container>`  
+
+Used for:
+
+- Debugging configuration  
+- Verifying `.env` values  
+
+---
+
+###  Nginx Debugging
+
+- `docker exec -it nginx nginx -t` → Test config  
+- `docker exec -it nginx nginx -s reload` → Reload service  
+
+---
+
+###  TLS Version Testing
+
+Test supported TLS versions:
+
+---
+
+TLS 1.0 (should FAIL ❌):
+
+- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1`
+
+---
+
+TLS 1.1 (should FAIL ❌):
+
+- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_1`
+
+---
+
+TLS 1.2 (should SUCCESS ✅):
+
+- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_2`
+
+---
+
+TLS 1.3 (should SUCCESS ✅):
+
+- `docker exec -it nginx openssl s_client -connect localhost:443 -tls1_3`
 
 ---

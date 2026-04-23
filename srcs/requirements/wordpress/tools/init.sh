@@ -1,19 +1,18 @@
 #!/bin/sh
 set -e
 
-
 SQL_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 FTP_PWD=$(cat /run/secrets/ftp_user_password)
 
-cd /var/www/wordpress
+# cd /var/www/wordpress
 
 if [ ! -f "wp-config.php" ]; then
     echo "WordPress not found. Starting installation..."
 
     if [ ! -f "wp-settings.php" ]; then
-         /usr/local/bin/wp core download --allow-root
+        php83 -d memory_limit=-1 /usr/local/bin/wp core download --allow-root
     fi
 
     php83 -d memory_limit=-1 /usr/local/bin/wp config create --allow-root \

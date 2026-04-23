@@ -37,6 +37,6 @@ history
 
 
 
-
+docker exec -it <container_name> ps -ef test PID 1 & docker top <container_name_or_id> docker top && docker exec <container_name ps aux
 
 
